@@ -12,8 +12,9 @@ class othelloBord {
     bordVakje *ingang;
     bordVakje *maakRij();
     void ritsen(bordVakje* boven, bordVakje *onder);
-    bool beurt;
     int lengte, breedte;
+
+    bool beurt; //als true, beurt speler 1
 
     public:
     othelloBord();
@@ -22,7 +23,7 @@ class othelloBord {
     void hoofdMenu(); //MOET DIT IN OTH.H????
     void maakBord();
 
-    void gegevens(); //l,b..
+    void gegevens(); //l,b, speler1, speler2,..
     void point();
     void beginPositie();
     void verwijderen();

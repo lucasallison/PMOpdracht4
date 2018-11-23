@@ -31,8 +31,11 @@ void othelloBord::drukAf() {
 
 void othelloBord::hoofdMenu() {
 
+    char keuzeGebruiker;
     cout << "welkom in het hoofdmenu" << endl;
     drukAf();
+    cout << "Maak een keuze: [S]tart spel, [G]egevens wijzigen, ...." << endl;
+
 
 }//hoofdmenu
 
@@ -66,7 +69,6 @@ void othelloBord::ritsen(bordVakje *boven, bordVakje *onder) {
         boven = boven->buren[2];
         onder = onder->buren[2];
     }
-
 }//ritsen
 
 bordVakje* othelloBord::maakRij() {
@@ -93,7 +95,6 @@ bordVakje* othelloBord::maakRij() {
 //CONSTRUCTORS
 bordVakje::bordVakje() {
     kleur = '.';
-
     int i;
     for (i=0; i<8; i++){
         buren[i] = nullptr;
@@ -103,7 +104,8 @@ bordVakje::bordVakje() {
 othelloBord::othelloBord() {
     speler1 = true;
     speler2 = true;
-    lengte = 2;
-    breedte = 2;
+    lengte = 8; //0 kan niet?????
+    breedte = 8; //0 kan niet???
     ingang = nullptr;
+    beurt = true;
 }//othelloBord
