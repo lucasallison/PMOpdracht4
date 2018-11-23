@@ -2,7 +2,7 @@
 
 class bordVakje {
 public:
-    char kleur = 'w'; //PAS DIT AAN!!
+    char kleur; //PAS DIT AAN!!
     bordVakje* buren[8];
     bordVakje ();
 };//bordVakje
@@ -21,8 +21,9 @@ class othelloBord {
     void drukAf();
     void hoofdMenu(); //MOET DIT IN OTH.H????
     void maakBord();
+
     void gegevens(); //l,b..
-    void point ();
+    void point();
     void beginPositie();
     void verwijderen();
     void mensZet();
@@ -30,6 +31,8 @@ class othelloBord {
     void doeZet(int i, int j);
     bordVakje *gaNaar(int i, int j);
     void zetVolgensRegels();
+
+
     bool speler1; //true als mens
     bool speler2; //true als mens
     int klaar();
