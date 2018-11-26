@@ -21,7 +21,8 @@ othelloBord::othelloBord() {
     lengte = 0;
     breedte = 0;
     ingang = nullptr;
-    beurt = true;
+    beurt = true; //speler 1 als true: hij is wit
+
 }//othelloBord
 
 
@@ -50,43 +51,103 @@ void othelloBord::hoofdMenu() {
 
     cout << "voer eerst een paar gegevens in" << endl;
     gegevens();
-    cout << "Maak een keuze: [S]tart spel, [G]egevens wijzigen, ...." << endl;
 
-    keuzeGebruiker = gebruikerInvoer();
-    switch(keuzeGebruiker) {
-        case 'G': case 'g':
-            gegevens();
-            break;
-        case 'S': case 's':
-            maakBord();
-            beginPositie();
-            drukAf();
-            break;
-        default:
-            cout << "vul een valide letter in." << endl;
-
+    while (keuzeGebruiker != 'q' || keuzeGebruiker != 'Q') {
+        cout << "Maak een keuze: [S]tart spel, [G]egevens wijzigen, [Q]uit, ...." << endl;
+        keuzeGebruiker = gebruikerInvoer();
+        switch (keuzeGebruiker) {
+            case 'G': case 'g':
+                gegevens(); //DIT DOET HET NIET!!!!!!
+                break;
+            case 'S': case 's':
+                maakBord();
+                beginPositie();
+                drukAf();
+                cout << "\n";
+                mogelijkeZetten();
+                break;
+            case 'q': case 'Q':
+                cout << "einde programma." << endl;
+                break;
+            default:
+                cout << "vul een valide letter in." << endl;
+        }
     }
 }//hoofdmenu
+
+void othelloBord::mogelijkeZetten() {
+    bordVakje * hulpEen, * hulpTwee;
+    int i, j;
+    hulpEen = ingang;
+    hulpTwee = ingang;
+    for (i=1; i < lengte; i++) {
+        hulpTwee = hulpEen;
+        for (j=1; j < breedte; j++) {
+            if (isGeldigeZet(i, j)) {
+                cout << "u kunt zetten op: " << i << "," << j << endl;
+                hulpEen = hulpEen->buren[2];
+            }
+        }
+        //cout << hulpTwee << endl;
+        hulpEen = hulpTwee->buren[4];
+    }
+
+
+
+}//mogelijkeZetten:
+
+
+
+bool othelloBord::isGeldigeZet(int plekLengte, int plekBreedte) {
+    char kleur;
+    int i, j, z = 0;
+    if (beurt) {
+        kleur = 'Z';
+    } else {
+        kleur = 'W';
+    }
+
+    bordVakje *hulpEen, *hulpTwee;
+    hulpEen = ingang;
+
+    for (j= 1; j < plekBreedte; j++) {
+        hulpEen = hulpEen->buren[2];
+    }
+    for (i = 1; i < plekLengte; i++) {
+        hulpEen = hulpEen->buren[4];
+    }
+
+    while (z < 8) {
+        if (hulpEen->buren[z] != nullptr) {
+            hulpTwee = hulpEen->buren[z];
+            if (kleur != hulpTwee->kleur && hulpTwee->kleur != '.' && hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur == kleur) {
+                return true;
+            }
+        }
+        z++;
+    }
+    return false;
+}//isGeldigeZet
 
 void othelloBord::gegevens() {
     int invoerGebruiker;
 
     do {
-        cout << "lengte: " << endl;
+        cout << "afmetingen: " << endl;
         invoerGebruiker = leesGetal(21);
     } while (invoerGebruiker >= 4 && invoerGebruiker%2 != 0);
     lengte = invoerGebruiker;
     breedte = invoerGebruiker;
-    
+
 }//gegevens
 
 void othelloBord::beginPositie() {
     int i, j;
     bordVakje *hulp = ingang;
-    for (i=1; i < breedte/2; i++) {
+    for (j=1; j < breedte/2; j++) {
         hulp = hulp->buren[2];
     }
-    for (j=1; j < lengte/2; j++) {
+    for (i=1; i < lengte/2; i++) {
         hulp = hulp->buren[4];
     }
 
@@ -111,7 +172,6 @@ void othelloBord::maakBord() {
         boven = onder;
         onder = maakRij();
         ritsen(boven, onder);
-
     }
 
 }//maakBord

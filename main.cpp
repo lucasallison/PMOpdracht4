@@ -11,4 +11,6 @@ int main () {
    othelloBord oth;
    oth.hoofdMenu();
 
+   return 0;
+
 }//main

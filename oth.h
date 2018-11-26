@@ -25,17 +25,16 @@ class othelloBord {
     char gebruikerInvoer(); //MOET DEZE IN CLASS??
     int leesGetal(int max);
     void beginPositie();
+    bool isGeldigeZet(int i, int j);
+    void mogelijkeZetten();
 
     void gegevens(); //l,b, speler1, speler2,..
     void point();
     void verwijderen();
     void mensZet();
-    bool isGeldigeZet(int i, int j);
     void doeZet(int i, int j);
     bordVakje *gaNaar(int i, int j);
     void zetVolgensRegels();
-
-
     bool speler1; //true als mens
     bool speler2; //true als mens
     int klaar();
