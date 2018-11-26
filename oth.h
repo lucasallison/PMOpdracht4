@@ -22,10 +22,12 @@ class othelloBord {
     void drukAf();
     void hoofdMenu(); //MOET DIT IN OTH.H????
     void maakBord();
+    char gebruikerInvoer(); //MOET DEZE IN CLASS??
+    int leesGetal(int max);
+    void beginPositie();
 
     void gegevens(); //l,b, speler1, speler2,..
     void point();
-    void beginPositie();
     void verwijderen();
     void mensZet();
     bool isGeldigeZet(int i, int j);
