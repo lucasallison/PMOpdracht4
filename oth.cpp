@@ -143,7 +143,6 @@ bordVakje* othelloBord::gaNaar(int lengte, int breedte) {
     }
 
     return hulp;
-
 }//gaNaar
 
 void othelloBord::doeZet(int lengte, int breedte) {
@@ -216,7 +215,7 @@ void othelloBord::gegevens() {
 
     do {
         cout << "afmetingen: ";
-        invoerGebruiker = leesGetal(21);
+        invoerGebruiker = leesGetal(20);
     } while (invoerGebruiker >= 4 && invoerGebruiker%2 != 0);
     lengte = invoerGebruiker;
     breedte = invoerGebruiker;
