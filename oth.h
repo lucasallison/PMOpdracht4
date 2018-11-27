@@ -26,15 +26,21 @@ class othelloBord {
     int leesGetal(int max);
     void beginPositie();
     bool isGeldigeZet(int i, int j);
-    void mogelijkeZetten();
-
-    void gegevens(); //l,b, speler1, speler2,..
-    void point();
+    bool mogelijkeZetten();
     void verwijderen();
-    void mensZet();
     void doeZet(int i, int j);
     bordVakje *gaNaar(int i, int j);
-    void zetVolgensRegels();
+    void startSpel();
+
+    void gegevens(); //l,b, speler1, speler2,..
+
+    void point();
+    void mensZet();
+    void computerZet();
+
+    void zetVolgensRegels(); //??
+
+
     bool speler1; //true als mens
     bool speler2; //true als mens
     int klaar();
