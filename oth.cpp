@@ -1,6 +1,8 @@
 //in deze file komen de functies van oth.h
 #include "oth.h"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 //kunnen lengte en breedte verschillen? of lengte == breedte??
@@ -17,11 +19,11 @@ bordVakje::bordVakje() {
 
 othelloBord::othelloBord() {
     speler1 = true;
-    speler2 = true;
+    speler2 = false;
     lengte = 0;
     breedte = 0;
     ingang = nullptr;
-    beurt = true; //speler 1 als true: hij is wit
+    beurt = true; //speler 1 als true: hij is zwart
 
 }//othelloBord
 
@@ -52,6 +54,7 @@ void othelloBord::hoofdMenu() {
 
     char keuzeGebruiker = '?';
 
+
     cout << "voer eerst een paar gegevens in" << endl;
     gegevens();
 
@@ -61,7 +64,6 @@ void othelloBord::hoofdMenu() {
         switch (keuzeGebruiker) {
             case 'G': case 'g':
                 gegevens(); //DIT MOET NOG AANGEPAST WORDEN
-
                 break;
             case 'S': case 's':
                 maakBord();
@@ -87,11 +89,19 @@ void othelloBord::startSpel() {
                 cout << "speler 1 is aan de beurt" << endl;
                 mensZet();
                 drukAf();
+            } else {
+                cout << "computerzet:" << endl;
+                computerZet();
+                drukAf();
             }
         } else {
             if (speler2) {
                 cout << "speler 2 is aan de beurt" << endl;
                 mensZet();
+                drukAf();
+            } else {
+                cout << "computerzet:" << endl;
+                computerZet();
                 drukAf();
             }
 
@@ -108,6 +118,19 @@ void othelloBord::startSpel() {
     cout << "KLAAR" << endl;
 
 }//startSpel
+
+void othelloBord::computerZet() {
+    int i, j;
+
+    do {
+        i = 1+(rand() % lengte);
+        j = 1+(rand() % breedte);
+    } while (! isGeldigeZet(i, j));
+
+
+    doeZet(i, j);
+
+}//computerZet
 
 void othelloBord::mensZet() {
     int i, j;

@@ -2,14 +2,17 @@
 
 #include <iostream>
 #include "oth.h"
+#include <ctime>
+#include <cstdlib>
 
 using namespace std;
 
 
 int main () {
 
-   othelloBord oth;
-   oth.hoofdMenu();
+    srand(time(0));
+    othelloBord oth;
+    oth.hoofdMenu();
 
    return 0;
 
