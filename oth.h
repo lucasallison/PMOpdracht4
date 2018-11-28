@@ -34,18 +34,14 @@ class othelloBord {
     void computerZet();
     void afmetingenWijzigen();
     void spelerKeuze();
-
-    void startSpel();
-    void gegevens(); //l,b, speler1, speler2,..
-
-    void point();
-
-
-    void zetVolgensRegels(); //??
-
-
     bool speler1; //true als mens
     bool speler2; //true als mens
-    int klaar();
+    void gegevens(); //l,b, speler1, speler2
+    int telPunten(bool zwart);
+    void klaar();
+
+    void startSpel();
+    void zetVolgensRegels(); //??
+
 
 };

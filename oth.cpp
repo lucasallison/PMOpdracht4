@@ -6,6 +6,9 @@
 using namespace std;
 
 //kunnen lengte en breedte verschillen? of lengte == breedte??
+//voeg toe dat er gepast kan worden
+//fix de while loops
+//voeg toe dat je tijdens spelen kan stoppen
 
 
 //CONSTRUCTORS
@@ -91,9 +94,13 @@ void othelloBord::startSpel() {
                 mensZet();
                 drukAf();
             } else {
-                cout << "computerzet:" << endl;
-                computerZet();
-                drukAf();
+                if (!speler1 && !speler2) {
+                    computerZet();
+                } else {
+                    cout << "computerzet (zwart):" << endl;
+                    computerZet();
+                    drukAf();
+                }
             }
         } else {
             if (speler2) {
@@ -101,9 +108,13 @@ void othelloBord::startSpel() {
                 mensZet();
                 drukAf();
             } else {
-                cout << "computerzet:" << endl;
-                computerZet();
-                drukAf();
+                if (!speler1 && !speler2) {
+                    computerZet();
+                } else {
+                    cout << "computerzet (wit):" << endl;
+                    computerZet();
+                    drukAf();
+                }
             }
 
         }
@@ -116,9 +127,61 @@ void othelloBord::startSpel() {
 
     }
 
-    cout << "KLAAR" << endl;
+    if (! speler1 && ! speler2) {
+        cout << "De computers hebben hun zetten gedaan..." << endl;
+        drukAf();
+    }
+
+    klaar();
 
 }//startSpel
+
+void othelloBord::klaar() {
+
+    int puntenZwart = telPunten(true);
+    int puntenWit = telPunten(false);
+
+    cout << "Het spel is afgelopen!" << endl;
+
+    if (puntenZwart > puntenWit) {
+        cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten" << endl;
+        cout << "Wit heeft verloren, met een totaal van " << puntenWit << " punten" << endl;
+        cout << "Gefelicteerd zwart!" << endl;
+    }
+
+    if (puntenZwart < puntenWit) {
+        cout << "Wit is de winnaar, met een totaal van " << puntenWit << " punten" << endl;
+        cout << "Zwart heeft verloren, met een totaal van " << puntenZwart << " punten" << endl;
+        cout << "Gefelicteerd wit!" << endl;
+    }
+
+    if (puntenZwart == puntenWit) {
+        cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << "punten" << endl;
+    }
+
+}//klaar
+
+int othelloBord::telPunten(bool zwart ) {
+    char kleur;
+    int i, j, teller = 0;
+    bordVakje *hulp;
+    if (zwart) {
+        kleur = 'Z';
+    } else {
+        kleur = 'W';
+    }
+
+    for (i=1; i <= lengte; i++) {
+        for (j=1; j <= breedte; j++) {
+            hulp = gaNaar(i, j);
+            if (hulp->kleur == kleur) {
+                teller++;
+            }
+        }
+    }
+
+    return teller;
+}
 
 void othelloBord::computerZet() {
     int i, j;
@@ -236,6 +299,8 @@ bool othelloBord::isGeldigeZet(int plekLengte, int plekBreedte) {
 
 void othelloBord::gegevens() {
     int keuzeGebruiker;
+
+    cout << "\nWelkom bij gegevens wijzigen." << endl;
 
    do {
        cout << "Maak een keuze: [A]fmetingen wijzigen, [S]pelers rollen toekennen of [T]erug" << endl;
