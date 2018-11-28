@@ -58,7 +58,7 @@ void othelloBord::hoofdMenu() {
     char keuzeGebruiker = '?';
 
 
-    cout << "voer eerst een paar gegevens in" << endl;
+    cout << "Voer eerst een paar gegevens in" << endl;
     afmetingenWijzigen();
     spelerKeuze();
 
@@ -97,9 +97,11 @@ void othelloBord::startSpel() {
                 if (!speler1 && !speler2) {
                     computerZet();
                 } else {
-                    cout << "computerzet (zwart):" << endl;
+                    cout << "De computer (zwart) heeft zijn zet gedaan." << endl;
                     computerZet();
                     drukAf();
+
+
                 }
             }
         } else {
@@ -111,9 +113,10 @@ void othelloBord::startSpel() {
                 if (!speler1 && !speler2) {
                     computerZet();
                 } else {
-                    cout << "computerzet (wit):" << endl;
+                    cout << "De computer (wit) heeft zijn zet gedaan." << endl;
                     computerZet();
                     drukAf();
+
                 }
             }
 
@@ -128,7 +131,7 @@ void othelloBord::startSpel() {
     }
 
     if (! speler1 && ! speler2) {
-        cout << "De computers hebben hun zetten gedaan..." << endl;
+        cout << "De computers hebben hard gestreden..." << endl;
         drukAf();
     }
 
@@ -144,8 +147,8 @@ void othelloBord::klaar() {
     cout << "Het spel is afgelopen!" << endl;
 
     if (puntenZwart > puntenWit) {
-        cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten" << endl;
-        cout << "Wit heeft verloren, met een totaal van " << puntenWit << " punten" << endl;
+        cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten." << endl;
+        cout << "Wit heeft verloren, met een totaal van " << puntenWit << " punten." << endl;
         cout << "Gefelicteerd zwart!" << endl;
     }
 
@@ -156,8 +159,10 @@ void othelloBord::klaar() {
     }
 
     if (puntenZwart == puntenWit) {
-        cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << "punten" << endl;
+        cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << " punten" << endl;
     }
+
+    cout << "\n";
 
 }//klaar
 
