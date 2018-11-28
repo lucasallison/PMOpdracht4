@@ -31,12 +31,15 @@ class othelloBord {
     void doeZet(int i, int j);
     bordVakje *gaNaar(int i, int j);
     void mensZet();
+    void computerZet();
+    void afmetingenWijzigen();
+    void spelerKeuze();
 
     void startSpel();
     void gegevens(); //l,b, speler1, speler2,..
 
     void point();
-    void computerZet();
+
 
     void zetVolgensRegels(); //??
 
