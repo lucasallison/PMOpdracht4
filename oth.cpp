@@ -263,21 +263,20 @@ void othelloBord::doeZet(int lengte, int breedte) {
 
     for (z=0; z<8; z++) {
         hulpTwee = hulpEen;
-
-        while (hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur != kleur) {
-            hulpTwee = hulpTwee->buren[z];
-        }
-
-        if (hulpTwee->buren[z] != nullptr) {
-            hulpTwee = hulpEen;
-            while (hulpTwee->buren[z]->kleur != kleur) {
+            while (hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur != kleur) {
                 hulpTwee = hulpTwee->buren[z];
-                hulpTwee->kleur = kleur;
+            }
+
+            if (hulpTwee->buren[z] != nullptr) {
+                if (hulpTwee->buren[z]->kleur != '.') {
+                    hulpTwee = hulpEen;
+                    while (hulpTwee->buren[z]->kleur != kleur) {
+                        hulpTwee = hulpTwee->buren[z];
+                        hulpTwee->kleur = kleur;
+                    }
+                }
             }
         }
-
-    }
-
 
 
 }//doeZet
