@@ -320,7 +320,7 @@ bool othelloBord::isGeldigeZet(int plekLengte, int plekBreedte) {
                 hulpTwee = hulpTwee->buren[z];
             }
 
-            if (hulpTwee->buren[z] != nullptr) {
+            if (hulpTwee->buren[z] != nullptr && hulpTwee != hulpEen) {
                 hulpTwee = hulpTwee->buren[z];
                 if (hulpTwee->kleur == kleur) {
                     return true;
