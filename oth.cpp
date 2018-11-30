@@ -248,17 +248,38 @@ void othelloBord::doeZet(int lengte, int breedte) {
         kleur = 'W';
     }
 
-    bordVakje *hulp;
-    hulp = gaNaar(lengte, breedte);
+    bordVakje *hulpEen, *hulpTwee;
+    hulpEen = gaNaar(lengte, breedte);
 
-    hulp->kleur = kleur;
-    for (z=0; z<8; z++){
+    hulpEen->kleur = kleur;
+ /*   for (z=0; z<8; z++){
         if (hulp->buren[z] != nullptr && hulp->buren[z]->buren[z] != nullptr) {
             if (hulp->buren[z]->buren[z]->kleur == hulp->kleur && hulp->buren[z]->kleur != '.') {
                 hulp->buren[z]->kleur = kleur;
             }
         }
     }
+    */
+
+    for (z=0; z<8; z++) {
+        hulpTwee = hulpEen;
+
+        while (hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur != kleur) {
+            hulpTwee = hulpTwee->buren[z];
+        }
+
+        if (hulpTwee->buren[z] != nullptr) {
+            hulpTwee = hulpEen;
+            while (hulpTwee->buren[z]->kleur != kleur) {
+                hulpTwee = hulpTwee->buren[z];
+                hulpTwee->kleur = kleur;
+            }
+        }
+
+    }
+
+
+
 }//doeZet
 
 bool othelloBord::mogelijkeZetten() {
@@ -279,23 +300,33 @@ bool othelloBord::mogelijkeZetten() {
 
 
 bool othelloBord::isGeldigeZet(int plekLengte, int plekBreedte) {
-    char kleur;
+    char kleur, kleurCheck;
     int z;
     if (beurt) {
         kleur = 'Z';
+        kleurCheck = 'W';
     } else {
         kleur = 'W';
+        kleurCheck = 'Z';
     }
 
     bordVakje *hulpEen, *hulpTwee;
     hulpEen = gaNaar(plekLengte, plekBreedte);
 
-    for (z=0; z < 8; z++) {
-        if (hulpEen->buren[z] != nullptr) {
-            hulpTwee = hulpEen->buren[z];
-            if (kleur != hulpTwee->kleur && hulpTwee->kleur != '.' && hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur == kleur &&  hulpEen->kleur == '.') {
-                return true;
+    if (hulpEen->kleur == '.') {
+        for (z = 0; z < 8; z++) {
+            hulpTwee = hulpEen;
+            while (hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur == kleurCheck) {
+                hulpTwee = hulpTwee->buren[z];
             }
+
+            if (hulpTwee->buren[z] != nullptr) {
+                hulpTwee = hulpTwee->buren[z];
+                if (hulpTwee->kleur == kleur) {
+                    return true;
+                }
+            }
+
         }
     }
     return false;
@@ -369,7 +400,7 @@ void othelloBord::afmetingenWijzigen() {
             cout << "Dit is ongeldig, probeer het opnieuw." << endl;
         }
         cout << "Geef de afmetingen van het bord: ";
-        invoerGebruiker = leesGetal(20);
+        invoerGebruiker = leesGetal(100);
         ongeldigeInvoer = true;
     } while (invoerGebruiker >= 4 && invoerGebruiker%2 != 0);
     lengte = invoerGebruiker;
