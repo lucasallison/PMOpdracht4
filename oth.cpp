@@ -39,13 +39,35 @@ othelloBord::~othelloBord() {
 
 
 void othelloBord::drukAf() {
-
+    int n = 1, j = 0;
     bordVakje *hulpEen, *hulpTwee;
     hulpEen = ingang;
     hulpTwee = ingang;
 
+    cout << "\n  ";
+    while (j < breedte){
+        if (n == 10) {
+            cout << 0 << " ";
+            n = 0;
+        }  else {
+            cout << n << " ";
+        }
+        n++;
+        j++;
+    }
+
+    n = 1;
     cout << "\n";
     while (hulpEen != nullptr) {
+
+        if (n == 10) {
+            cout << 0 << " ";
+            n = 0;
+        }  else {
+            cout << n << " ";
+        }
+        n++;
+
         while (hulpEen != nullptr) {
 
             cout << hulpEen->kleur << " ";
@@ -79,13 +101,39 @@ void othelloBord::doeZetVolgensbeurt() {
     beurt = !beurt;
 }//doeZetVolgensBeurt
 
+bool othelloBord::checkVrijePlekken() {
+
+    int i, j;
+
+    for (i=1; i <= lengte; i++) {
+        for (j=1; j <= breedte; j++) {
+            if (gaNaar(i,j)->kleur == '.') {
+                return true;
+            }
+        }
+    }
+    return false;
+}//checkVrijePlekken
 
 void othelloBord::klaar() {
+
+
 
     int puntenZwart = telPunten(true);
     int puntenWit = telPunten(false);
 
     cout << "\nHet spel is afgelopen!" << endl;
+
+    if (checkVrijePlekken()) {
+        if (beurt) {
+            cout << "Wit is de winnaar, gefeliciteerd!" << endl;
+        } else {
+            cout << "Zwart is de winnnar, gefeliciteerd!" << endl;
+        }
+
+        cout << "Zwart heeft een totaal van " << puntenZwart << " punten" << endl;
+        cout << "Wit heeft een totaal van " << puntenWit << " punten" << endl;
+    }
 
     if (puntenZwart > puntenWit) {
         cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten." << endl;
@@ -155,7 +203,7 @@ void othelloBord::mensZet() {
         kleur = 'W';
     }
 
-    cout << "(" << kleur << ") " << "Vul in: 0,0 om te stoppen of geef de plek waar u een zet wilt doen)" << endl;
+    cout << "(" << kleur << ") " << "Vul in: 0,0 om te stoppen of geef de plek waar u een zet wilt doen" << endl;
 
         do {
             cout << "Lengte: ";
@@ -170,7 +218,7 @@ void othelloBord::mensZet() {
 
             if (!isGeldigeZet(i, j)) {
                 drukAf();
-                cout << "Dit is geen geldige zet, probeer het opnieuw" << endl;
+                cout << "(" << kleur << ")" << " Dit is geen geldige zet, probeer het opnieuw" << endl;
             }
 
         } while (!isGeldigeZet(i, j));
@@ -304,7 +352,7 @@ void othelloBord::gegevens() {
     } else {
         speler1 = false;
     }
-    cout << "[0] Speler 2 is een mens. [1] Speler  is een computer" << endl;
+    cout << "[0] Speler 2 is een mens. [1] Speler 2 is een computer" << endl;
     invoerGebruiker = leesGetal(1);
     if (invoerGebruiker == 0) {
         speler2 = true;
@@ -416,9 +464,7 @@ int othelloBord::leesGetal(int max) {
         }
 
         if (getal > max) {
-            do {
-                getal--; //CHECK DIT EVEN: EEN GETAL GROTER DAN MAX WORDT MAX EN WAT IS MAX??
-            } while (getal > max);
+            getal = max;
         }
         cin.get(invoer);
     }

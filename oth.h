@@ -33,6 +33,7 @@ class othelloBord {
     void computerZet();
     void gegevens();
     int telPunten(bool zwart);
+    bool checkVrijePlekken();
     void klaar();
     void doeZetVolgensbeurt();
     bool speler1; //true als mens
