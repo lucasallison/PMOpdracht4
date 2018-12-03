@@ -15,10 +15,11 @@ int main () {
     oth.gegevens();
     oth.maakBord();
     oth.beginPositie();
+    oth.drukAf();
 
     while (oth.mogelijkeZetten()) {
-        oth.drukAf();
         oth.doeZetVolgensbeurt();
+        oth.drukAf();
     }
 
     oth.klaar();

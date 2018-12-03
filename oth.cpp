@@ -5,14 +5,12 @@
 #include <ctime>
 using namespace std;
 
-//kunnen lengte en breedte verschillen? of lengte == breedte??
 //voeg toe dat er gepast kan worden
-//fix de while loops
-//voeg toe dat je tijdens spelen kan stoppen
 //als een speler niet kan heeft hij verloren
-//stand tussen door cout
 //mensen kunnen een zet terug nemen
-//dat mensen kunnen stoppen tijdens spelen
+//mag exit???????
+//mag "\n"????
+//getal invoer --
 
 
 //constructors
@@ -58,57 +56,36 @@ void othelloBord::drukAf() {
         hulpTwee = hulpEen;
     }
 
-    cout << "\nPunten zwart: " << telPunten(true) << ". Punten wit: " << telPunten(false) << endl;
+    cout << "\nPunten zwart: " << telPunten(true) << "  Punten wit: " << telPunten(false) << endl;
 
 }//drukAf
 
 void othelloBord::doeZetVolgensbeurt() {
-
     cout << "\n";
 
-    if (beurt) {
-        if (speler1) {
-            cout << "Zwart is aan de beurt" << endl;
-            mensZet();
-            drukAf();
-        } else {
-            if (!speler1 && !speler2) {
-                computerZet();
-            } else {
-                cout << "De computer (zwart) heeft zijn zet gedaan." << endl;
-                computerZet();
-                drukAf();
-
-
-            }
-        }
-    } else {
-        if (speler2) {
-            cout << "Wit is aan de beurt" << endl;
-            mensZet();
-            drukAf();
-        } else {
-            if (!speler1 && !speler2) {
-                computerZet();
-            } else {
-                cout << "De computer (wit) heeft zijn zet gedaan." << endl;
-                computerZet();
-                drukAf();
-
-            }
-        }
-
+    if (beurt && speler1) {
+        mensZet();
+    }
+    if (beurt && !speler1) {
+        computerZet();
+    }
+    if (!beurt && speler2) {
+        mensZet();
+    }
+    if (!beurt && !speler2) {
+        computerZet();
     }
 
     beurt = !beurt;
-}//MAAAAAK DEZE BETER
+}//doeZetVolgensBeurt
+
 
 void othelloBord::klaar() {
 
     int puntenZwart = telPunten(true);
     int puntenWit = telPunten(false);
 
-    cout << "Het spel is afgelopen!" << endl;
+    cout << "\nHet spel is afgelopen!" << endl;
 
     if (puntenZwart > puntenWit) {
         cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten." << endl;
@@ -152,6 +129,13 @@ int othelloBord::telPunten(bool zwart ) {
 void othelloBord::computerZet() {
     int i, j;
 
+    if (speler1 && !speler2) {
+        cout << "(W) De computer heeft zijn zet gedaan" << endl;
+    }
+    if (!speler1 && speler2) {
+        cout << "(Z) De computer heeft zijn zet gedaan" << endl;
+    }
+
     do {
         i = 1+(rand() % lengte);
         j = 1+(rand() % breedte);
@@ -164,22 +148,34 @@ void othelloBord::computerZet() {
 
 void othelloBord::mensZet() {
     int i, j;
-    cout << "Geef 0,0 om te stoppen of geef de plek waar u een zet wilt doen)" << endl;
+    char kleur;
+    if (beurt) {
+        kleur = 'Z';
+    } else {
+        kleur = 'W';
+    }
 
-    do {
-        cout << "Lengte: ";
-        i = leesGetal(lengte);
-        cout << "Breedte: ";
-        j = leesGetal(breedte);
+    cout << "(" << kleur << ") " << "Vul in: 0,0 om te stoppen of geef de plek waar u een zet wilt doen)" << endl;
 
-        if (! isGeldigeZet(i, j)) {
-            drukAf();
-            cout << "Dit is geen geldige zet, probeer het opnieuw" << endl;
-        }
+        do {
+            cout << "Lengte: ";
+            i = leesGetal(lengte);
+            cout << "Breedte: ";
+            j = leesGetal(breedte);
 
-    } while (! isGeldigeZet(i, j));
+            if (i == 0 && j == 0) {
+                cout << "\nDat was het dan!" << endl;
+                exit (0);
+            }
 
-    doeZet(i, j);
+            if (!isGeldigeZet(i, j)) {
+                drukAf();
+                cout << "Dit is geen geldige zet, probeer het opnieuw" << endl;
+            }
+
+        } while (!isGeldigeZet(i, j));
+
+        doeZet(i, j);
 
 }//mensZet
 
