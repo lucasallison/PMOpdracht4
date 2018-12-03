@@ -12,7 +12,18 @@ int main () {
 
     srand(time(0));
     othelloBord oth;
-    oth.hoofdMenu();
+    oth.gegevens();
+    oth.maakBord();
+    oth.beginPositie();
+
+    while (oth.mogelijkeZetten()) {
+        oth.drukAf();
+        oth.doeZetVolgensbeurt();
+    }
+
+    oth.klaar();
+
+
 
    return 0;
 

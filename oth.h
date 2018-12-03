@@ -18,9 +18,8 @@ class othelloBord {
 
     public:
     othelloBord();
-    //VOEG EEN DESTRUCTOR TOE
+    ~othelloBord();
     void drukAf();
-    void hoofdMenu(); //MOET DIT IN OTH.H????
     void maakBord();
     char gebruikerInvoer(); //MOET DEZE IN CLASS??
     int leesGetal(int max);
@@ -32,16 +31,17 @@ class othelloBord {
     bordVakje *gaNaar(int i, int j);
     void mensZet();
     void computerZet();
-    void afmetingenWijzigen();
-    void spelerKeuze();
-    bool speler1; //true als mens
-    bool speler2; //true als mens
-    void gegevens(); //l,b, speler1, speler2
+    void gegevens();
     int telPunten(bool zwart);
     void klaar();
+    void doeZetVolgensbeurt();
+    bool speler1; //true als mens
+    bool speler2; //true als mens
 
-    void startSpel();
-    void zetVolgensRegels(); //??
+
+
+    void kopieer ();
+    void vervolg ();
 
 
 };

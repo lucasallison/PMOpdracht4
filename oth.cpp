@@ -9,9 +9,13 @@ using namespace std;
 //voeg toe dat er gepast kan worden
 //fix de while loops
 //voeg toe dat je tijdens spelen kan stoppen
+//als een speler niet kan heeft hij verloren
+//stand tussen door cout
+//mensen kunnen een zet terug nemen
+//dat mensen kunnen stoppen tijdens spelen
 
 
-//CONSTRUCTORS
+//constructors
 bordVakje::bordVakje() {
     kleur = '.';
     int i;
@@ -29,6 +33,11 @@ othelloBord::othelloBord() {
     beurt = true; //speler 1 als true: hij is zwart
 
 }//othelloBord
+
+//destructor
+othelloBord::~othelloBord() {
+    verwijderen();
+}//~othelloBord
 
 
 void othelloBord::drukAf() {
@@ -49,95 +58,50 @@ void othelloBord::drukAf() {
         hulpTwee = hulpEen;
     }
 
-    cout << "\n";
+    cout << "\nPunten zwart: " << telPunten(true) << ". Punten wit: " << telPunten(false) << endl;
 
 }//drukAf
 
-void othelloBord::hoofdMenu() {
+void othelloBord::doeZetVolgensbeurt() {
 
-    char keuzeGebruiker = '?';
+    cout << "\n";
 
-
-    cout << "Voer eerst een paar gegevens in" << endl;
-    afmetingenWijzigen();
-    spelerKeuze();
-
-    while (keuzeGebruiker != 'q' || keuzeGebruiker != 'Q') {
-        cout << "Maak een keuze: [S]tart spel, [G]egevens wijzigen, [Q]uit, ....";
-        keuzeGebruiker = gebruikerInvoer();
-        switch (keuzeGebruiker) {
-            case 'G': case 'g':
-                gegevens();
-                break;
-            case 'S': case 's':
-                maakBord();
-                startSpel();
-                break;
-            case 'q': case 'Q':
-                cout << "einde programma." << endl;
-                break;
-            default:
-                cout << "vul een valide letter in." << endl;
-        }
-    }
-}//hoofdmenu
-
-void othelloBord::startSpel() {
-    beginPositie();
-    drukAf();
-
-
-    while (mogelijkeZetten()) {
-        if (beurt) {
-            if (speler1) {
-                cout << "Zwart is aan de beurt" << endl;
-                mensZet();
-                drukAf();
-            } else {
-                if (!speler1 && !speler2) {
-                    computerZet();
-                } else {
-                    cout << "De computer (zwart) heeft zijn zet gedaan." << endl;
-                    computerZet();
-                    drukAf();
-
-
-                }
-            }
+    if (beurt) {
+        if (speler1) {
+            cout << "Zwart is aan de beurt" << endl;
+            mensZet();
+            drukAf();
         } else {
-            if (speler2) {
-                cout << "Wit is aan de beurt" << endl;
-                mensZet();
-                drukAf();
+            if (!speler1 && !speler2) {
+                computerZet();
             } else {
-                if (!speler1 && !speler2) {
-                    computerZet();
-                } else {
-                    cout << "De computer (wit) heeft zijn zet gedaan." << endl;
-                    computerZet();
-                    drukAf();
+                cout << "De computer (zwart) heeft zijn zet gedaan." << endl;
+                computerZet();
+                drukAf();
 
-                }
+
             }
-
         }
-
-        if (beurt) {
-            beurt = false;
+    } else {
+        if (speler2) {
+            cout << "Wit is aan de beurt" << endl;
+            mensZet();
+            drukAf();
         } else {
-            beurt = true;
+            if (!speler1 && !speler2) {
+                computerZet();
+            } else {
+                cout << "De computer (wit) heeft zijn zet gedaan." << endl;
+                computerZet();
+                drukAf();
+
+            }
         }
 
     }
 
-    if (! speler1 && ! speler2) {
-        cout << "De computers hebben hard gestreden..." << endl;
-        drukAf();
-    }
-
-    klaar();
-
-}//startSpel
+    beurt = !beurt;
+}//MAAAAAK DEZE BETER
 
 void othelloBord::klaar() {
 
@@ -162,8 +126,6 @@ void othelloBord::klaar() {
         cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << " punten" << endl;
     }
 
-    cout << "\n";
-
 }//klaar
 
 int othelloBord::telPunten(bool zwart ) {
@@ -184,7 +146,6 @@ int othelloBord::telPunten(bool zwart ) {
             }
         }
     }
-
     return teller;
 }
 
@@ -203,7 +164,7 @@ void othelloBord::computerZet() {
 
 void othelloBord::mensZet() {
     int i, j;
-    cout << "Geeft de plek waar u een zet wilt doen: " << endl;
+    cout << "Geef 0,0 om te stoppen of geef de plek waar u een zet wilt doen)" << endl;
 
     do {
         cout << "Lengte: ";
@@ -252,31 +213,22 @@ void othelloBord::doeZet(int lengte, int breedte) {
     hulpEen = gaNaar(lengte, breedte);
 
     hulpEen->kleur = kleur;
- /*   for (z=0; z<8; z++){
-        if (hulp->buren[z] != nullptr && hulp->buren[z]->buren[z] != nullptr) {
-            if (hulp->buren[z]->buren[z]->kleur == hulp->kleur && hulp->buren[z]->kleur != '.') {
-                hulp->buren[z]->kleur = kleur;
-            }
-        }
-    }
-    */
-
     for (z=0; z<8; z++) {
         hulpTwee = hulpEen;
-            while (hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur != kleur) {
+        while (hulpTwee->buren[z] != nullptr && hulpTwee->buren[z]->kleur != kleur) {
                 hulpTwee = hulpTwee->buren[z];
-            }
-
-            if (hulpTwee->buren[z] != nullptr) {
-                if (hulpTwee->buren[z]->kleur != '.') {
-                    hulpTwee = hulpEen;
-                    while (hulpTwee->buren[z]->kleur != kleur) {
-                        hulpTwee = hulpTwee->buren[z];
-                        hulpTwee->kleur = kleur;
-                    }
-                }
-            }
         }
+
+        if (hulpTwee->buren[z] != nullptr) {
+             if (hulpTwee->buren[z]->kleur != '.') {
+                 hulpTwee = hulpEen;
+                 while (hulpTwee->buren[z]->kleur != kleur) {
+                     hulpTwee = hulpTwee->buren[z];
+                     hulpTwee->kleur = kleur;
+                 }
+             }
+         }
+    }
 
 
 }//doeZet
@@ -331,69 +283,12 @@ bool othelloBord::isGeldigeZet(int plekLengte, int plekBreedte) {
     return false;
 }//isGeldigeZet
 
-
 void othelloBord::gegevens() {
-    int keuzeGebruiker;
 
-    cout << "\nWelkom bij gegevens wijzigen." << endl;
-
-   do {
-       cout << "Maak een keuze: [A]fmetingen wijzigen, [S]pelers rollen toekennen of [T]erug" << endl;
-       keuzeGebruiker = gebruikerInvoer();
-       switch (keuzeGebruiker) {
-           case 'A': case 'a':
-               afmetingenWijzigen();
-               break;
-           case 'S': case 's':
-               spelerKeuze();
-               break;
-           case 'T': case 't':
-               break;
-           default:
-               cout << "vul een valide letter in" << endl;
-
-       }
-
-   }  while (keuzeGebruiker != 'T' || keuzeGebruiker != 't');
-
-}//gegevens
-
-void othelloBord::spelerKeuze() {
-
-    char keuzeGebruiker;
-    int beginnen;
-    cout << "Maak een keuze: [A] Player vs Player, [B] Player vs Computer of "
-         << "[C] Computer vs Computer" << endl;
-    keuzeGebruiker = gebruikerInvoer();
-    switch (keuzeGebruiker) {
-        case 'A': case 'a':
-            speler1 = true;
-            speler2 = true;
-            break;
-        case 'B': case 'b':
-                cout << "Wilt u dat [0] de gebruiker begint of [1] de computer begint? ";
-                beginnen = leesGetal(1);
-                if (beginnen == 0) {
-                    speler1 = true;
-                    speler2 = false;
-                } else {
-                    speler1 = false;
-                    speler2 = true;
-                }
-            break;
-        case 'C': case 'c':
-            speler1 = false;
-            speler2 = false;
-            break;
-        default:
-            cout << "Vul een valide letter in:" << endl;
-    }
-}//spelerKeuze
-
-void othelloBord::afmetingenWijzigen() {
     int invoerGebruiker;
     bool ongeldigeInvoer = false;
 
+    cout << "Vul eerst een paar gegevens in." << endl;
     do {
         if (ongeldigeInvoer) {
             cout << "Dit is ongeldig, probeer het opnieuw." << endl;
@@ -405,7 +300,24 @@ void othelloBord::afmetingenWijzigen() {
     lengte = invoerGebruiker;
     breedte = invoerGebruiker;
 
-}//afmetingenWijz
+    cout << "Vul nu de rollen van de spelers in. " << endl;
+    cout << "[0] Speler 1 is een mens. [1] Speler 1 is een computer" << endl;
+    invoerGebruiker = leesGetal(1);
+    if (invoerGebruiker == 0) {
+        speler1 = true;
+    } else {
+        speler1 = false;
+    }
+    cout << "[0] Speler 2 is een mens. [1] Speler  is een computer" << endl;
+    invoerGebruiker = leesGetal(1);
+    if (invoerGebruiker == 0) {
+        speler2 = true;
+    } else {
+        speler2 = false;
+    }
+
+
+}//gegevens
 
 void othelloBord::beginPositie() {
 
@@ -419,7 +331,6 @@ void othelloBord::beginPositie() {
     hulp->kleur = 'W';
     hulp = hulp->buren[0];
     hulp->kleur = 'Z';
-
 
 }//beginPositie
 
@@ -451,10 +362,8 @@ void othelloBord::ritsen(bordVakje *boven, bordVakje *onder) {
         onder = onder->buren[2];
     }
 
-
 }//ritsen
 
-//LAAT DIT EVEN CHECKEN!!!!
 void  othelloBord::verwijderen() {
 
     bordVakje *hulp;
