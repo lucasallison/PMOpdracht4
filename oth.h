@@ -12,7 +12,7 @@ class othelloBord {
     bordVakje *ingang;
     bordVakje *maakRij();
     void ritsen(bordVakje* boven, bordVakje *onder);
-    int lengte, breedte;
+    int zijde; //lengte == breedte
 
     bool beurt; //als true, beurt speler 1
 

@@ -5,12 +5,9 @@
 #include <ctime>
 using namespace std;
 
-//voeg toe dat er gepast kan worden
-//als een speler niet kan heeft hij verloren
 //mensen kunnen een zet terug nemen
 //mag exit???????
 //mag "\n"????
-//getal invoer --
 
 
 //constructors
@@ -25,8 +22,7 @@ bordVakje::bordVakje() {
 othelloBord::othelloBord() {
     speler1 = true;
     speler2 = false;
-    lengte = 0;
-    breedte = 0;
+    zijde = 0;
     ingang = nullptr;
     beurt = true; //speler 1 als true: hij is zwart
 
@@ -45,7 +41,7 @@ void othelloBord::drukAf() {
     hulpTwee = ingang;
 
     cout << "\n  ";
-    while (j < breedte){
+    while (j < zijde){
         if (n == 10) {
             cout << 0 << " ";
             n = 0;
@@ -101,54 +97,39 @@ void othelloBord::doeZetVolgensbeurt() {
     beurt = !beurt;
 }//doeZetVolgensBeurt
 
-bool othelloBord::checkVrijePlekken() {
-
-    int i, j;
-
-    for (i=1; i <= lengte; i++) {
-        for (j=1; j <= breedte; j++) {
-            if (gaNaar(i,j)->kleur == '.') {
-                return true;
-            }
-        }
-    }
-    return false;
-}//checkVrijePlekken
-
 void othelloBord::klaar() {
-
-
 
     int puntenZwart = telPunten(true);
     int puntenWit = telPunten(false);
 
     cout << "\nHet spel is afgelopen!" << endl;
 
-    if (checkVrijePlekken()) {
+    if (zijde * zijde != puntenZwart + puntenWit) {
         if (beurt) {
-            cout << "Wit is de winnaar, gefeliciteerd!" << endl;
+            cout << "Wit is de winnaar, omdat zwart moest passen. gefeliciteerd wit!" << endl;
         } else {
-            cout << "Zwart is de winnnar, gefeliciteerd!" << endl;
+            cout << "Zwart is de winnnar, omdat wit moest passen. gefeliciteerd zwart!" << endl;
+        }
+        cout << "Zwart is geindigd met een totaal van " << puntenZwart << " punten" << endl;
+        cout << "Wit is geindigd met een totaal van " << puntenWit << " punten" << endl;
+
+    } else {
+
+        if (puntenZwart > puntenWit) {
+            cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten." << endl;
+            cout << "Wit heeft verloren, met een totaal van " << puntenWit << " punten." << endl;
+            cout << "Gefelicteerd zwart!" << endl;
         }
 
-        cout << "Zwart heeft een totaal van " << puntenZwart << " punten" << endl;
-        cout << "Wit heeft een totaal van " << puntenWit << " punten" << endl;
-    }
+        if (puntenZwart < puntenWit) {
+            cout << "Wit is de winnaar, met een totaal van " << puntenWit << " punten" << endl;
+            cout << "Zwart heeft verloren, met een totaal van " << puntenZwart << " punten" << endl;
+            cout << "Gefelicteerd wit!" << endl;
+        }
 
-    if (puntenZwart > puntenWit) {
-        cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten." << endl;
-        cout << "Wit heeft verloren, met een totaal van " << puntenWit << " punten." << endl;
-        cout << "Gefelicteerd zwart!" << endl;
-    }
-
-    if (puntenZwart < puntenWit) {
-        cout << "Wit is de winnaar, met een totaal van " << puntenWit << " punten" << endl;
-        cout << "Zwart heeft verloren, met een totaal van " << puntenZwart << " punten" << endl;
-        cout << "Gefelicteerd wit!" << endl;
-    }
-
-    if (puntenZwart == puntenWit) {
-        cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << " punten" << endl;
+        if (puntenZwart == puntenWit) {
+            cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << " punten" << endl;
+        }
     }
 
 }//klaar
@@ -163,8 +144,8 @@ int othelloBord::telPunten(bool zwart ) {
         kleur = 'W';
     }
 
-    for (i=1; i <= lengte; i++) {
-        for (j=1; j <= breedte; j++) {
+    for (i=1; i <= zijde; i++) {
+        for (j=1; j <= zijde; j++) {
             hulp = gaNaar(i, j);
             if (hulp->kleur == kleur) {
                 teller++;
@@ -172,7 +153,7 @@ int othelloBord::telPunten(bool zwart ) {
         }
     }
     return teller;
-}
+}//telPunten
 
 void othelloBord::computerZet() {
     int i, j;
@@ -185,8 +166,8 @@ void othelloBord::computerZet() {
     }
 
     do {
-        i = 1+(rand() % lengte);
-        j = 1+(rand() % breedte);
+        i = 1+(rand() % zijde);
+        j = 1+(rand() % zijde);
     } while (! isGeldigeZet(i, j));
 
 
@@ -207,9 +188,9 @@ void othelloBord::mensZet() {
 
         do {
             cout << "Lengte: ";
-            i = leesGetal(lengte);
+            i = leesGetal(zijde);
             cout << "Breedte: ";
-            j = leesGetal(breedte);
+            j = leesGetal(zijde);
 
             if (i == 0 && j == 0) {
                 cout << "\nDat was het dan!" << endl;
@@ -281,8 +262,8 @@ bool othelloBord::mogelijkeZetten() {
 
     int i, j;
 
-    for (i=1; i <= lengte; i++) {
-        for (j=1; j <= breedte; j++) {
+    for (i=1; i <= zijde; i++) {
+        for (j=1; j <= zijde; j++) {
             if (isGeldigeZet(i, j)) {
                 return true;
             }
@@ -341,8 +322,7 @@ void othelloBord::gegevens() {
         invoerGebruiker = leesGetal(100);
         ongeldigeInvoer = true;
     } while (invoerGebruiker >= 4 && invoerGebruiker%2 != 0);
-    lengte = invoerGebruiker;
-    breedte = invoerGebruiker;
+    zijde = invoerGebruiker;
 
     cout << "Vul nu de rollen van de spelers in. " << endl;
     cout << "[0] Speler 1 is een mens. [1] Speler 1 is een computer" << endl;
@@ -366,7 +346,7 @@ void othelloBord::gegevens() {
 void othelloBord::beginPositie() {
 
     bordVakje *hulp;
-    hulp = gaNaar(lengte/2, breedte/2);
+    hulp = gaNaar(zijde/2, zijde/2);
 
     hulp->kleur = 'W';
     hulp = hulp->buren[4];
@@ -384,7 +364,7 @@ void othelloBord::maakBord() {
     ingang = maakRij();
     onder = ingang;
 
-    for(i=1; i<lengte; i++){
+    for(i=1; i<zijde; i++){
         boven = onder;
         onder = maakRij();
         ritsen(boven, onder);
@@ -430,7 +410,7 @@ bordVakje* othelloBord::maakRij() {
     hulpEen = new bordVakje;
     hulpTwee = hulpEen;
 
-    for (i=1; i < breedte; i++) {
+    for (i=1; i < zijde; i++) {
         hulpEen->buren[6] = new bordVakje;
         hulpTwee = hulpEen->buren[6];
         hulpTwee->buren[2] = hulpEen;
