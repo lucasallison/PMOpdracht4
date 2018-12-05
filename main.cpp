@@ -7,10 +7,8 @@
 
 using namespace std;
 
+void startSpel() {
 
-int main () {
-
-    srand(time(0));
     othelloBord oth;
     oth.gegevens();
     oth.maakBord();
@@ -26,8 +24,14 @@ int main () {
 
     oth.klaar();
 
+}//startSpel
 
 
-   return 0;
+int main () {
+
+    srand(time(0));
+    startSpel();
+
+    return 0;
 
 }//main
