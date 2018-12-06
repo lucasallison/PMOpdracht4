@@ -217,31 +217,28 @@ void othelloBord::klaar() {
 
     if (zijde * zijde != puntenZwart + puntenWit) {
         if (beurt) {
-            cout << "Wit is de winnaar, omdat zwart moest passen. gefeliciteerd wit!" << endl;
+            cout << "Wit is de winnaar, omdat zwart moest passen. Gefeliciteerd wit!" << endl;
         } else {
-            cout << "Zwart is de winnnar, omdat wit moest passen. gefeliciteerd zwart!" << endl;
+            cout << "Zwart is de winnnar, omdat wit moest passen. Gefeliciteerd zwart!" << endl;
         }
-        cout << "Zwart is geindigd met een totaal van " << puntenZwart << " punten" << endl;
-        cout << "Wit is geindigd met een totaal van " << puntenWit << " punten" << endl;
 
     } else {
 
         if (puntenZwart > puntenWit) {
-            cout << "Zwart is de winnaar, met een totaal van " << puntenZwart << " punten." << endl;
-            cout << "Wit heeft verloren, met een totaal van " << puntenWit << " punten." << endl;
-            cout << "Gefelicteerd zwart!" << endl;
+            cout << "Zwart is de winnaar door de meerderheid van de punten. Gefliciteerd zwart!" << endl;
         }
 
         if (puntenZwart < puntenWit) {
-            cout << "Wit is de winnaar, met een totaal van " << puntenWit << " punten" << endl;
-            cout << "Zwart heeft verloren, met een totaal van " << puntenZwart << " punten" << endl;
-            cout << "Gefelicteerd wit!" << endl;
+            cout << "Wit is de winnaar door de meerheid van de punten. Gefelicteerd wit!" << endl;
         }
 
         if (puntenZwart == puntenWit) {
-            cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << " punten" << endl;
+            cout << "Het is geindigd in een gelijk spel."  << endl;
         }
     }
+
+    cout << "Zwart is geindigd met een totaal van " << puntenZwart << " punten" << endl;
+    cout << "Wit is geindigd met een totaal van " << puntenWit << " punten" << endl;
 
 }//klaar
 
