@@ -20,6 +20,8 @@ othelloBord::othelloBord() {
     zijde = 0;
     ingang = nullptr;
     beurt = true;
+    tellerNieuwBord = 1;
+    tellerPartijen = 0;
 }//othelloBord
 
 //destructor
@@ -82,6 +84,74 @@ void othelloBord::stapel() {
     }
 }//stapel
 
+
+
+void othelloBord::vervolgParijen() {
+
+    int i, j, z, w;
+    bordVakje *hulpEen, *hulpTwee;
+    hulpEen = ingang;
+    hulpTwee = ingang;
+
+    w = tellerNieuwBord;
+    tellerNieuwBord = 0;
+
+
+    while (hulpTwee->buren[7] != nullptr) {
+        hulpTwee = hulpTwee->buren[7];
+    }
+
+
+    for (z = 0; z < w; z++) {
+        if (!mogelijkeZetten()) {
+            tellerPartijen++;
+        } else {
+
+            for (i = 1; i <= zijde; i++) {
+                for (j = 1; j <= zijde; j++) {
+                    if (isGeldigeZet(i, j)) {
+                        maakBord();
+                        doeZet(i, j);
+                        hulpTwee->buren[7] = ingang;
+                        ingang->buren[6] = hulpTwee;
+                        hulpTwee = ingang;
+                        ingang = hulpEen;
+                        tellerNieuwBord++;
+                    }
+                }
+            }
+        }
+
+        if (ingang->buren[7] != nullptr) {
+            ingang = ingang->buren[7];
+            hulpEen = ingang;
+        }
+    }
+
+
+    if (ingang != nullptr) {
+        if (ingang->buren[7] == nullptr) {
+            cout << "Vervolg partijen: " << tellerPartijen << endl;
+
+            hulpEen = ingang;
+            while (ingang->buren[6] != nullptr) {
+                hulpEen = hulpEen->buren[6];
+                verwijderen();
+                ingang = hulpEen;
+            }
+
+            tellerPartijen = 0;
+            tellerNieuwBord = 1;
+        } else {
+            ingang = ingang->buren[7];
+            beurt = !beurt;
+            vervolgParijen();
+        }
+
+    }
+
+}//vervolgPartijen
+
 //hierdoor kan het bord terug worden gezet naar een oude stand
 void othelloBord::stappenTerug(int m) {
     bordVakje *hulp;
@@ -106,10 +176,13 @@ void othelloBord::mensZet() {
         kleur = 'W';
     }
     do {
-        cout << "(" << kleur << ") " << "Vul in: [Z]et doen, [S]tap terug gaan of [Q]uit " << endl;
+        cout << "(" << kleur << ") " << "Vul in: [Z]et doen, [A}antal vervolg partijen, [S]tap terug gaan of [Q]uit " << endl;
         invoer = gebruikerInvoer();
 
         switch (invoer) {
+            case 'A': case 'a':
+            vervolgParijen();
+            break;
             case 'S': case 's':
                 if (speler1 && speler2) {
                     stappenTerug(2);

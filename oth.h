@@ -40,4 +40,14 @@ public:
     bool speler2; //true als mens
     bordVakje *gaNaar(int lengte, int breedte);
 
+
+
+    int tellerPartijen;
+    int tellerNieuwBord;
+
+
+    void vervolgParijen();
+
+
+
 };//othelloBord
