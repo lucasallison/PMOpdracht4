@@ -10,7 +10,6 @@ public:
 class othelloBord {
     private:
     bordVakje *ingang;
-    bordVakje *ingangKopie;
     bordVakje *maakRij();
     void ritsen(bordVakje* boven, bordVakje *onder);
     int zijde; //lengte == breedte
@@ -39,14 +38,9 @@ class othelloBord {
     bool speler2; //true als mens
 
 
-    bordVakje *gaNaarKopie(int lengte, int breedte);
-    void stappenTerug(int n);
-    void verwijderenKopie();
-    void zetBordTerug();
-    void kopieerBord();
+    void stappenTerug(int m);
     void stapel();
 
-    void drukAfKopie ();
 
     //void vervolg ();
 

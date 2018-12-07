@@ -14,11 +14,9 @@ void startSpel() {
     oth.maakBord();
     oth.beginPositie();
     oth.drukAf();
-    oth.stapel();
 
     while (oth.mogelijkeZetten()) {
         oth.doeZetVolgensbeurt();
-        oth.stapel();
         oth.drukAf();
     }
 

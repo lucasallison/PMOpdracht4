@@ -9,6 +9,7 @@ using namespace std;
 //mag exit???????
 //mag "\n"????
 //bedenk nog wat op zijde + 1 (mensZet)
+//fix dat mensen er geen letters in kan worden gevuld
 
 
 //constructors
@@ -25,7 +26,6 @@ othelloBord::othelloBord() {
     speler2 = false;
     zijde = 0;
     ingang = nullptr;
-    ingangKopie = nullptr;
     beurt = true; //speler 1 als true: hij is zwart
 
 }//othelloBord
@@ -42,7 +42,7 @@ void othelloBord::drukAf() {
     hulpEen = ingang;
     hulpTwee = ingang;
 
-    cout << "\n  ";
+    cout << endl << "  ";
     while (j < zijde){
         if (n == 10) {
             cout << 0 << " ";
@@ -55,7 +55,7 @@ void othelloBord::drukAf() {
     }
 
     n = 1;
-    cout << "\n";
+    cout << endl;
     while (hulpEen != nullptr) {
 
         if (n == 10) {
@@ -71,89 +71,42 @@ void othelloBord::drukAf() {
             cout << hulpEen->kleur << " ";
             hulpEen = hulpEen->buren[2];
         }
-        cout << "\n";
+        cout << endl;
         hulpEen = hulpTwee->buren[4];
         hulpTwee = hulpEen;
     }
 
-    cout << "\nPunten zwart: " << telPunten(true) << "  Punten wit: " << telPunten(false) << endl;
+    cout << endl << "Punten zwart: " << telPunten(true) << "  Punten wit: " << telPunten(false) << endl;
 
 }//drukAf
 
-void othelloBord::drukAfKopie() {
-    int n = 1, j = 0;
-    bordVakje *hulpEen, *hulpTwee;
-    hulpEen = ingangKopie;
-    hulpTwee = ingangKopie;
 
-    cout << "\n  ";
-    while (j < zijde){
-        if (n == 10) {
-            cout << 0 << " ";
-            n = 0;
-        }  else {
-            cout << n << " ";
-        }
-        n++;
-        j++;
-    }
-
-    n = 1;
-    cout << "\n";
-    while (hulpEen != nullptr) {
-
-        if (n == 10) {
-            cout << 0 << " ";
-            n = 0;
-        }  else {
-            cout << n << " ";
-        }
-        n++;
-
-        while (hulpEen != nullptr) {
-
-            cout << hulpEen->kleur << " ";
-            hulpEen = hulpEen->buren[2];
-        }
-        cout << "\n";
-        hulpEen = hulpTwee->buren[4];
-        hulpTwee = hulpEen;
-    }
-
-    cout << "\nPunten zwart: " << telPunten(true) << "  Punten wit: " << telPunten(false) << endl;
-
-}//drukAfKopie
-
-
-
-void othelloBord::kopieerBord() {
-
-    int i, j;
-    bordVakje *boven, *onder;
-    ingangKopie = maakRij();
-    onder = ingangKopie;
-
-    for(i=1; i<zijde; i++){
-        boven = onder;
-        onder = maakRij();
-        ritsen(boven, onder);
-    }
-
-    for (i=1; i <= zijde; i++) {
-        for (j=1; j <= zijde; j++) {
-            gaNaarKopie(i, j)->kleur = gaNaar(i, j)->kleur;
-
-        }
-    }
-
-}//kopieerBord
 
 void othelloBord::stapel() {
 
-    bordVakje *hulp;
-    hulp = ingangKopie;
-    kopieerBord();
-    ingangKopie->buren[6] = hulp;
+
+
+    int i, j;
+    bordVakje *hulpEen, *hulpTwee;
+    hulpTwee = ingang;
+    maakBord();
+
+
+    ingang->buren[6] = hulpTwee;
+
+
+
+    for (i = 1; i <= zijde; i++) {
+        hulpEen = hulpTwee;
+        hulpTwee = hulpTwee->buren[4];
+
+        for (j = 1; j <= zijde; j++) {
+            gaNaar(i, j)->kleur = hulpEen->kleur;
+            hulpEen = hulpEen->buren[2];
+        }
+
+    }
+
 
 }//stapel
 
@@ -162,33 +115,79 @@ void othelloBord::stappenTerug(int m) {
     bordVakje *hulp;
     int n = 0;
 
-    while ( n < m) {
-        if (ingang != nullptr) {
-            if (ingangKopie->buren[6] != nullptr) {
-                hulp = ingangKopie->buren[6];
-                verwijderenKopie();
-                ingangKopie = hulp;
+    while (n < m) {
+            if (ingang->buren[6] != nullptr) {
+                hulp = ingang->buren[6];
+                verwijderen();
+                ingang = hulp;
             }
-        }
         n++;
     }
 
 }//stappenTerug
 
-void othelloBord::zetBordTerug() {
-    int i, j;
 
-    for (i=1; i <= zijde; i++) {
-        for (j=1; j <= zijde; j++) {
-            gaNaar(i, j)->kleur = gaNaarKopie(i, j)->kleur;
+void othelloBord::mensZet() {
+    int i, j;
+    char kleur, invoer;
+    if (beurt) {
+        kleur = 'Z';
+    } else {
+        kleur = 'W';
+    }
+
+    do {
+        cout << "(" << kleur << ") " << "Vul in: [Z]et doen, [S]tap terug gaan of [Q]uit " << endl;
+        invoer = gebruikerInvoer();
+
+        switch (invoer) {
+            case 'S': case 's':
+
+                if (speler1 && speler2) {
+                    stappenTerug(2);
+                } else {
+                    stappenTerug(1);
+                }
+                cout << endl << "Het bord is terug gezet naar uw vorige beurt" << endl;
+                beurt = !beurt;
+                break;
+
+            case 'Z': case 'z':
+
+                do {
+                    cout << "Lengte: ";
+                    i = leesGetal(zijde);
+                    cout << "Breedte: ";
+                    j = leesGetal(zijde);
+
+
+                    if (!isGeldigeZet(i, j)) {
+                        drukAf();
+                        cout << "(" << kleur << ")" << " Dit is geen geldige zet, probeer het opnieuw" << endl;
+                    }
+
+
+                } while (!isGeldigeZet(i, j));
+                stapel();
+                doeZet(i, j);
+                break;
+
+            case 'Q': case 'q':
+
+                cout << endl << "Dat was het dan!" << endl;
+                exit(0);
+
+            default:
+                cout << "Vul een valide letter in" << endl;
 
         }
-    }
-}
+    } while (invoer != 's' && invoer != 'S' && invoer != 'z' && invoer != 'Z');
+}//mensZet
+
 
 
 void othelloBord::doeZetVolgensbeurt() {
-    cout << "\n";
+    cout << endl;
 
     if (beurt) {
         if (speler1) {
@@ -213,7 +212,7 @@ void othelloBord::klaar() {
     int puntenZwart = telPunten(true);
     int puntenWit = telPunten(false);
 
-    cout << "\nHet spel is afgelopen!" << endl;
+    cout << endl << "Het spel is afgelopen!" << endl;
 
     if (zijde * zijde != puntenZwart + puntenWit) {
         if (beurt) {
@@ -233,12 +232,14 @@ void othelloBord::klaar() {
         }
 
         if (puntenZwart == puntenWit) {
-            cout << "Het is geindigd in een gelijk spel."  << endl;
+            cout << "Het is geindigd in een gelijk spel. Beide spelers hadden " << puntenZwart << " punten."  << endl;
         }
     }
 
-    cout << "Zwart is geindigd met een totaal van " << puntenZwart << " punten" << endl;
-    cout << "Wit is geindigd met een totaal van " << puntenWit << " punten" << endl;
+    if (puntenZwart != puntenWit) {
+        cout << "Zwart is geindigd met een totaal van " << puntenZwart << " punten" << endl;
+        cout << "Wit is geindigd met een totaal van " << puntenWit << " punten" << endl;
+    }
 
 }//klaar
 
@@ -283,47 +284,6 @@ void othelloBord::computerZet() {
 
 }//computerZet
 
-void othelloBord::mensZet() {
-    int i, j;
-    char kleur;
-    if (beurt) {
-        kleur = 'Z';
-    } else {
-        kleur = 'W';
-    }
-
-    cout << "(" << kleur << ") " << "Vul in: (0,0) om te stoppen, (0,1) om terug te gaan of geef de plek waar u een zet wilt doen" << endl;
-
-        do {
-            cout << "Lengte: ";
-            i = leesGetal(zijde);
-            cout << "Breedte: ";
-            j = leesGetal(zijde);
-
-            if (i == 0 && j == 0) {
-                cout << "\nDat was het dan!" << endl;
-                exit (0);
-            }
-
-            if (i == 0 && j == 1) {
-                stappenTerug(2);
-                zetBordTerug();
-                stappenTerug(1);
-                cout << "\nHet bord is terug gezet naar uw vorige beurt" << endl;
-                beurt = !beurt;
-            } else if (!isGeldigeZet(i, j)) {
-                drukAf();
-                cout << "(" << kleur << ")" << " Dit is geen geldige zet, probeer het opnieuw" << endl;
-            }
-
-        } while (!isGeldigeZet(i, j) && i != 0 && j != 1);
-
-
-        if (i != 0 && j != 1) {
-            doeZet(i, j);
-        }
-
-}//mensZet
 
 bordVakje* othelloBord::gaNaar(int lengte, int breedte) {
     int i, j;
@@ -339,24 +299,6 @@ bordVakje* othelloBord::gaNaar(int lengte, int breedte) {
 
     return hulp;
 }//gaNaar
-
-
-bordVakje* othelloBord::gaNaarKopie(int lengte, int breedte) {
-
-    int i, j;
-    bordVakje *hulp;
-    hulp = ingangKopie;
-
-    for (j= 1; j < breedte; j++) {
-        hulp = hulp->buren[2];
-    }
-    for (i = 1; i < lengte; i++) {
-        hulp = hulp->buren[4];
-    }
-
-    return hulp;
-
-}//VOEG DEZE SAMEN????
 
 void othelloBord::doeZet(int lengte, int breedte) {
 
@@ -459,6 +401,10 @@ void othelloBord::gegevens() {
     } while (invoerGebruiker >= 4 && invoerGebruiker%2 != 0);
     zijde = invoerGebruiker;
 
+    if (zijde < 4) {
+        zijde = 4;
+    }
+
     cout << "Vul nu de rollen van de spelers in. " << endl;
     cout << "[0] Speler één is een mens. [1] Speler één is een computer" << endl;
     invoerGebruiker = leesGetal(1);
@@ -537,23 +483,6 @@ void othelloBord::verwijderen() {
         delete hulp;
     }
 }//verwijderen
-
-void othelloBord::verwijderenKopie() {
-
-        bordVakje *hulp;
-
-        while (ingangKopie != nullptr) {
-            hulp = ingangKopie;
-            ingangKopie = hulp->buren[4];
-            while (hulp->buren[2] != nullptr) {
-                hulp = hulp->buren[2];
-                delete hulp->buren[6];
-            }
-            delete hulp;
-        }
-
-
-}//VOEG NOG SAMEN??
 
 bordVakje* othelloBord::maakRij() {
     int i;
