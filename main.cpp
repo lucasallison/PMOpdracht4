@@ -9,7 +9,6 @@ void startSpel() {
     othelloBord oth;
     oth.gegevens();
     oth.maakBord();
-    oth.beginPositie();
     oth.drukAf();
     while (oth.mogelijkeZetten()) {
         oth.doeZetVolgensbeurt();

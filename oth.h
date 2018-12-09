@@ -31,6 +31,9 @@ public:
     void gegevens();
     void stappenTerug(int m);
     void stapel();
+    void kopieren();
+    void berekenenZetten(int &tellerPartijen, int &tellerNieuwBord);
+    void vervolgPartijen();
     char gebruikerInvoer();
     int telPunten(bool zwart);
     int leesGetal(int max);
@@ -39,15 +42,4 @@ public:
     bool speler1; //true als mens
     bool speler2; //true als mens
     bordVakje *gaNaar(int lengte, int breedte);
-
-
-
-    int tellerPartijen;
-    int tellerNieuwBord;
-
-
-    void vervolgParijen();
-
-
-
 };//othelloBord
