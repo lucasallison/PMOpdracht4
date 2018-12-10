@@ -20,6 +20,8 @@ othelloBord::othelloBord() {
     zijde = 0;
     ingang = nullptr;
     beurt = true;
+
+    n = 0;
 }//othelloBord
 
 //destructor
@@ -87,12 +89,15 @@ void othelloBord::berekenenZetten(int &tellerPartijen, int &tellerNieuwBord) {
         hulpTwee = hulpTwee->buren[7];
     }
 
+
+    //cout << "TellerNieuwBord: " << w << endl;
     for (z = 0; z < w; z++) {
         for (i = 1; i <= zijde; i++) {
             for (j = 1; j <= zijde; j++) {
                 if (isGeldigeZet(i, j)) {
                     kopieren();
                     doeZet(i, j);
+                    //drukAf();
                     tellerPartijen++;
                     hulpTwee->buren[7] = ingang;
                     ingang->buren[6] = hulpTwee;
@@ -110,7 +115,7 @@ void othelloBord::berekenenZetten(int &tellerPartijen, int &tellerNieuwBord) {
     }
 
     hulpTwee = ingang;
-
+    n++;
     if (ingang->buren[7] == nullptr) {
         while (hulpEen->buren[6] != nullptr) {
             hulpEen = ingang->buren[6];

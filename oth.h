@@ -42,4 +42,8 @@ public:
     bool speler1; //true als mens
     bool speler2; //true als mens
     bordVakje *gaNaar(int lengte, int breedte);
+
+
+
+    int n;
 };//othelloBord
