@@ -1,5 +1,6 @@
 class bordVakje {
 
+//een bordvakje
 public:
     char kleur;
     bordVakje *buren[8];
@@ -7,6 +8,7 @@ public:
 
 };//bordVakje
 
+//class van functies voor het othello bord
 class othelloBord {
 
 private:
@@ -43,7 +45,4 @@ public:
     bool speler2; //true als mens
     bordVakje *gaNaar(int lengte, int breedte);
 
-
-
-    int n;
 };//othelloBord

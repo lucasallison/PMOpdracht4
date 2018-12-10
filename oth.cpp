@@ -16,12 +16,10 @@ bordVakje::bordVakje() {
 
 othelloBord::othelloBord() {
     speler1 = true;
-    speler2 = false;
+    speler2 = true;
     zijde = 0;
     ingang = nullptr;
     beurt = true;
-
-    n = 0;
 }//othelloBord
 
 //destructor
@@ -35,6 +33,7 @@ void othelloBord::drukAf() {
     bordVakje *hulpEen, *hulpTwee;
     hulpEen = ingang;
     hulpTwee = ingang;
+
     cout << endl << "  ";
     while (j < zijde) {
         if (n == 10) {
@@ -71,6 +70,7 @@ void othelloBord::drukAf() {
 void othelloBord::vervolgPartijen() {
     int aantalPartijen = 0, nieuwBord = 1;
     bool bewaarBeurt = beurt;
+
     berekenenZetten(aantalPartijen, nieuwBord);
     cout << "Aantal vervolg partijen: " << aantalPartijen << endl;
     beurt = bewaarBeurt;
@@ -79,51 +79,48 @@ void othelloBord::vervolgPartijen() {
 //berekent het aantal vervolg zetten
 void othelloBord::berekenenZetten(int &tellerPartijen, int &tellerNieuwBord) {
     int i, j, z, w;
-    bordVakje *hulpEen, *hulpTwee;
-    hulpEen = ingang;
-    hulpTwee = ingang;
+    bordVakje *hulpEen = ingang, *hulpTwee = ingang;
     w = tellerNieuwBord;
     tellerNieuwBord = 0;
 
     while (hulpTwee->buren[7] != nullptr) {
         hulpTwee = hulpTwee->buren[7];
     }
-
-
-    //cout << "TellerNieuwBord: " << w << endl;
     for (z = 0; z < w; z++) {
         for (i = 1; i <= zijde; i++) {
             for (j = 1; j <= zijde; j++) {
                 if (isGeldigeZet(i, j)) {
                     kopieren();
                     doeZet(i, j);
-                    //drukAf();
-                    tellerPartijen++;
                     hulpTwee->buren[7] = ingang;
                     ingang->buren[6] = hulpTwee;
                     hulpTwee = ingang;
                     ingang = hulpEen;
                     tellerNieuwBord++;
+                    tellerPartijen++;
                 }
             }
         }
-
         if (ingang->buren[7] != nullptr) {
             ingang = ingang->buren[7];
             hulpEen = ingang;
         }
     }
-
+    if (w != 0) {
+        if (ingang->buren[7] != nullptr) {
+            ingang = ingang->buren[6];
+            hulpEen = ingang;
+        }
+    }
     hulpTwee = ingang;
-    n++;
     if (ingang->buren[7] == nullptr) {
+
         while (hulpEen->buren[6] != nullptr) {
             hulpEen = ingang->buren[6];
             verwijderen();
             ingang = hulpEen;
         }
     } else {
-        ingang = hulpTwee;
         hulpTwee = hulpTwee->buren[7];
         while (hulpEen->buren[6] != nullptr) {
             hulpEen = ingang->buren[6];
@@ -140,16 +137,15 @@ void othelloBord::berekenenZetten(int &tellerPartijen, int &tellerNieuwBord) {
 
 //kopieert het huidige bord naar een nieuw bord
 void othelloBord::kopieren() {
-
     int i, j;
-    bordVakje *hulpEen, *hulpTwee;
-    hulpTwee = ingang;
+    bordVakje *hulpEen, *hulpTwee = ingang;
+
     maakBord();
     for (i = 1; i <= zijde; i++) {
         hulpEen = hulpTwee;
         hulpTwee = hulpTwee->buren[4];
         for (j = 1; j <= zijde; j++) {
-            gaNaar(i,j)->kleur = hulpEen->kleur;
+            gaNaar(i, j)->kleur = hulpEen->kleur;
             hulpEen = hulpEen->buren[2];
         }
     }
@@ -158,8 +154,8 @@ void othelloBord::kopieren() {
 //stapelt het huidige bord
 void othelloBord::stapel() {
     int i, j;
-    bordVakje *hulpEen, *hulpTwee;
-    hulpTwee = ingang;
+    bordVakje *hulpEen, *hulpTwee = ingang;
+
     maakBord();
     ingang->buren[5] = hulpTwee;
     for (i = 1; i <= zijde; i++) {
@@ -176,6 +172,7 @@ void othelloBord::stapel() {
 void othelloBord::stappenTerug(int m) {
     bordVakje *hulp;
     int n;
+
     for (n = 0; n < m; n++) {
         if (ingang->buren[5] != nullptr) {
             hulp = ingang->buren[5];
@@ -274,6 +271,7 @@ void othelloBord::doeZetVolgensbeurt() {
 void othelloBord::klaar() {
     int puntenZwart = telPunten(true);
     int puntenWit = telPunten(false);
+
     cout << endl << "Het spel is afgelopen!" << endl;
     if (zijde * zijde != puntenZwart + puntenWit) {
         if (beurt) {
@@ -308,6 +306,7 @@ int othelloBord::telPunten(bool zwart) {
     } else {
         kleur = 'W';
     }
+
     for (i = 1; i <= zijde; i++) {
         for (j = 1; j <= zijde; j++) {
             hulp = gaNaar(i, j);
@@ -322,6 +321,7 @@ int othelloBord::telPunten(bool zwart) {
 //hierdoor doet de computer een random zet
 void othelloBord::computerZet() {
     int i, j;
+
     if (speler1 && !speler2) {
         cout << "(W) De computer heeft zijn zet gedaan" << endl;
     }
@@ -335,10 +335,11 @@ void othelloBord::computerZet() {
     doeZet(i, j);
 }//computerZet
 
+//gaat naar het opgegeven vakje
 bordVakje *othelloBord::gaNaar(int lengte, int breedte) {
     int i, j;
-    bordVakje *hulp;
-    hulp = ingang;
+    bordVakje *hulp = ingang;
+
     for (j = 1; j < breedte; j++) {
         hulp = hulp->buren[2];
     }
@@ -358,6 +359,7 @@ void othelloBord::doeZet(int lengte, int breedte) {
         kleur = 'W';
     }
     bordVakje *hulpEen, *hulpTwee;
+
     hulpEen = gaNaar(lengte, breedte);
     hulpEen->kleur = kleur;
     for (z = 0; z < 8; z++) {
@@ -381,6 +383,7 @@ void othelloBord::doeZet(int lengte, int breedte) {
 //kijkt of er nog zetten gedaan kunnen worden
 bool othelloBord::mogelijkeZetten() {
     int i, j;
+
     for (i = 1; i <= zijde; i++) {
         for (j = 1; j <= zijde; j++) {
             if (isGeldigeZet(i, j)) {
@@ -402,6 +405,7 @@ bool othelloBord::isGeldigeZet(int plekLengte, int plekBreedte) {
         kleur = 'W';
         kleurCheck = 'Z';
     }
+
     bordVakje *hulpEen, *hulpTwee;
     hulpEen = gaNaar(plekLengte, plekBreedte);
     if (hulpEen->kleur == '.') {
@@ -427,6 +431,7 @@ bool othelloBord::isGeldigeZet(int plekLengte, int plekBreedte) {
 void othelloBord::gegevens() {
     int invoerGebruiker;
     bool ongeldigeInvoer = false;
+
     cout << "Vul eerst een paar gegevens in." << endl;
     do {
         if (ongeldigeInvoer) {
@@ -440,29 +445,26 @@ void othelloBord::gegevens() {
     if (zijde < 4) {
         zijde = 4;
     }
+
     cout << "Vul nu de rollen van de spelers in. " << endl;
     cout << "[0] Speler één is een mens. [1] Speler één is een computer" << endl;
     invoerGebruiker = leesGetal(1);
-    if (invoerGebruiker == 0) {
-        speler1 = true;
-    } else {
-        speler1 = false;
+    if (invoerGebruiker != 0) {
+        speler1 = !speler1;
     }
     cout << "[0] Speler twee is een mens. [1] Speler twee is een computer" << endl;
     invoerGebruiker = leesGetal(1);
-    if (invoerGebruiker == 0) {
-        speler2 = true;
-    } else {
-        speler2 = false;
+    if (invoerGebruiker != 0) {
+        speler2 = !speler2;
     }
 }//gegevens
 
 //zet de start waardes op het bord
 void othelloBord::beginPositie() {
-    gaNaar(zijde/2, zijde/2)->kleur = 'W';
-    gaNaar(zijde/2, zijde/2)->buren[4]->kleur = 'Z';
-    gaNaar(zijde/2, zijde/2)->buren[2]->kleur = 'Z';
-    gaNaar(zijde/2, zijde/2)->buren[3]->kleur = 'W';
+    gaNaar(zijde / 2, zijde / 2)->kleur = 'W';
+    gaNaar(zijde / 2, zijde / 2)->buren[4]->kleur = 'Z';
+    gaNaar(zijde / 2, zijde / 2)->buren[2]->kleur = 'Z';
+    gaNaar(zijde / 2, zijde / 2)->buren[3]->kleur = 'W';
 }//beginPositie
 
 //functie die een bord maakt
@@ -471,6 +473,7 @@ void othelloBord::maakBord() {
     bordVakje *boven, *onder;
     ingang = maakRij();
     onder = ingang;
+
     for (i = 1; i < zijde; i++) {
         boven = onder;
         onder = maakRij();
@@ -496,6 +499,7 @@ void othelloBord::ritsen(bordVakje *boven, bordVakje *onder) {
 //verwijderd een bord
 void othelloBord::verwijderen() {
     bordVakje *hulp;
+
     while (ingang != nullptr) {
         hulp = ingang;
         ingang = hulp->buren[4];
@@ -511,6 +515,7 @@ void othelloBord::verwijderen() {
 bordVakje *othelloBord::maakRij() {
     int i;
     bordVakje *hulpEen, *hulpTwee;
+
     hulpEen = new bordVakje;
     hulpTwee = hulpEen;
     for (i = 1; i < zijde; i++) {

@@ -5,6 +5,7 @@
 
 using namespace std;
 
+//functie waardoor het spel gespeeld kan worden
 void startSpel() {
     othelloBord oth;
     oth.gegevens();
